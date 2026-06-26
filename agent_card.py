@@ -66,6 +66,12 @@ APP_TITLE = "⬡ AgentCard"
 VERSION = "1.0.0"
 REFRESH_INTERVAL = 2.0  # seconds
 
+# Scoring caps (shared between Scorer.score() and _pct() helpers)
+_MAX_AGENTS = 4
+_MAX_MCP_SERVERS = 15
+_MAX_MODELS = 5
+_MAX_TOKEN_VELOCITY = 20_000
+
 # ── 16 Target CLIs ───────────────────────────────────────────────────────
 # Each entry: canonical name → detection signals (process keywords & config paths)
 CLI_SIGNATURES: Dict[str, Dict] = {
@@ -282,19 +288,19 @@ class Scorer:
         self, clis: List[CliStatus], mcp: List[McpTool],
         models: List[ModelUsage], burn: BurnMetrics,
     ) -> ScoreResult:
-        # Agents: 75 per running (cap 4) + 50 bonus for 3+
+        # Agents: 75 per running (cap _MAX_AGENTS) + 50 bonus for 3+
         running = sum(1 for c in clis if c.state == "RUNNING")
-        agents_pts = min(running, 4) * 75 + (50 if running >= 3 else 0)
+        agents_pts = min(running, _MAX_AGENTS) * 75 + (50 if running >= 3 else 0)
 
-        # MCP: 10 per server (cap 15) + 1 per tool (cap 50)
-        mcp_pts = min(len(mcp), 15) * 10 + min(sum(t.tool_count for t in mcp), 50)
+        # MCP: 10 per server (cap _MAX_MCP_SERVERS) + 1 per tool (cap 50)
+        mcp_pts = min(len(mcp), _MAX_MCP_SERVERS) * 10 + min(sum(t.tool_count for t in mcp), 50)
 
-        # Models: 30 per unique model (cap 5) + 50 for 3+ providers
-        model_pts = min(len(models), 5) * 30 + (50 if _provider_count(models) >= 3 else 0)
+        # Models: 30 per unique model (cap _MAX_MODELS) + 50 for 3+ providers
+        model_pts = min(len(models), _MAX_MODELS) * 30 + (50 if _provider_count(models) >= 3 else 0)
 
         # Burn: velocity scaled + sessions
         vel = burn.token_velocity
-        vel_pts = 150 if vel >= 20_000 else 100 if vel >= 5_000 else 50 if vel >= 1_000 else 0
+        vel_pts = 150 if vel >= _MAX_TOKEN_VELOCITY else 100 if vel >= 5_000 else 50 if vel >= 1_000 else 0
         session_pts = min(burn.session_count // 10, 10) * 10
         burn_pts = vel_pts + session_pts
 
@@ -314,6 +320,7 @@ class Scorer:
 
 
 def _provider_count(models: List[ModelUsage]) -> int:
+    """Count distinct LLM providers. Heuristic — based on model name patterns."""
     providers = set()
     for m in models:
         name = m.name.lower()
@@ -334,19 +341,19 @@ def _provider_count(models: List[ModelUsage]) -> int:
 
 def _agents_pct(clis: List[CliStatus]) -> float:
     running = sum(1 for c in clis if c.state == "RUNNING")
-    return min(running / 4 * 100, 100)
+    return min(running / _MAX_AGENTS * 100, 100)
 
 
 def _mcp_pct(mcp: List[McpTool]) -> float:
-    return min(len(mcp) / 15 * 100, 100)
+    return min(len(mcp) / _MAX_MCP_SERVERS * 100, 100)
 
 
 def _models_pct(models: List[ModelUsage]) -> float:
-    return min(len(models) / 5 * 100, 100)
+    return min(len(models) / _MAX_MODELS * 100, 100)
 
 
 def _burn_pct(burn: BurnMetrics) -> float:
-    vel_score = min(burn.token_velocity / 20_000 * 100, 100)
+    vel_score = min(burn.token_velocity / _MAX_TOKEN_VELOCITY * 100, 100)
     session_score = min(burn.session_count / 100 * 100, 100)
     return (vel_score + session_score) / 2
 
