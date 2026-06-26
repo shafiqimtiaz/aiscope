@@ -248,11 +248,12 @@ export function renderHtml(
     <div class="grid">
       <div class="section">
         <h2>🎒 AGENTS · Pokémon Team (${running.length} running)</h2>
-        ${[...running, ...idle].slice(0, 6).map(c => {
+        ${[...running, ...idle].map((c, idx) => {
           const spriteUrl = c.pokemonSlug ? `https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/${c.pokemonSlug}.png` : '';
           const imgHtml = spriteUrl ? `<img class="pokemon-sprite ${c.state.toLowerCase()}" src="${spriteUrl}" alt="${c.name}" width="52" height="52" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />` : '';
+          const isHidden = idx >= 6;
           return `
-            <div class="item">
+            <div class="item ${isHidden ? 'hidden-agent' : ''}" ${isHidden ? 'style="display: none;"' : ''}>
               <div class="sprite-container">
                 ${imgHtml}
                 <span class="icon fallback-icon">${c.icon}</span>
@@ -262,7 +263,7 @@ export function renderHtml(
             </div>
           `;
         }).join('')}
-        ${clis.length > 6 ? `<div class="item" style="color:#555555; padding-left: 0.5rem; font-family:'Courier New', monospace;">… +${clis.length - 6} MORE</div>` : ''}
+        ${clis.length > 6 ? `<div class="item" style="color:#555555; padding-left: 0.5rem; font-family:'Courier New', monospace; cursor: pointer;" onclick="document.querySelectorAll('.hidden-agent').forEach(el => el.style.display = 'flex'); this.style.display = 'none';">… +${clis.length - 6} MORE</div>` : ''}
       </div>
       <div class="section">
         <h2>📊 MODELS · Species Movepool</h2>
@@ -284,13 +285,16 @@ export function renderHtml(
       </div>
       <div class="section">
         <h2>🎒 MCP SERVERS · TMs & HMs (${mcp.length})</h2>
-        ${sortedMcp.slice(0, 5).map(t => `
-          <div class="item">
-            <span class="name" style="color:#111111">◆ ${t.name}</span>
-            <span style="color:#555555;font-size:0.8rem">[${t.toolCount} TOOLS]</span>
-          </div>
-        `).join('')}
-        ${mcp.length > 5 ? `<div class="item" style="color:#555555; padding-left: 0.5rem; font-family:'Courier New', monospace;">… +${mcp.length - 5} MORE</div>` : ''}
+        ${sortedMcp.map((t, idx) => {
+          const isHidden = idx >= 5;
+          return `
+            <div class="item ${isHidden ? 'hidden-mcp' : ''}" ${isHidden ? 'style="display: none;"' : ''}>
+              <span class="name" style="color:#111111">◆ ${t.name}</span>
+              <span style="color:#555555;font-size:0.8rem">[${t.toolCount} TOOLS]</span>
+            </div>
+          `;
+        }).join('')}
+        ${mcp.length > 5 ? `<div class="item" style="color:#555555; padding-left: 0.5rem; font-family:'Courier New', monospace; cursor: pointer;" onclick="document.querySelectorAll('.hidden-mcp').forEach(el => el.style.display = 'flex'); this.style.display = 'none';">… +${mcp.length - 5} MORE</div>` : ''}
       </div>
       <div class="section">
         <h2>🔋 TOKEN USAGE · PP Burn</h2>
