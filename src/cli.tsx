@@ -100,7 +100,7 @@ export function Dashboard({ demo }: DashboardProps) {
           {/* Agents */}
           <Box flexDirection="column" marginBottom={1}>
             <Text bold color="blue">
-              🤖 AGENTS ({running.length} running)
+              🎒 POKÉMON TEAM ({running.length} running)
             </Text>
             {clis.slice(0, 8).map((c, i) => (
               <Box key={i}>
@@ -124,7 +124,7 @@ export function Dashboard({ demo }: DashboardProps) {
           {/* MCP */}
           <Box flexDirection="column">
             <Text bold color="yellow">
-              🛠️ MCP ({mcp.length} servers, {totalTools} tools)
+              🎒 TMs & HMs (MCP) ({mcp.length} items, {totalTools} moves)
             </Text>
             {[...mcp].sort((a, b) => b.toolCount - a.toolCount).slice(0, 6).map((t, i) => (
               <Box key={i}>
@@ -141,7 +141,7 @@ export function Dashboard({ demo }: DashboardProps) {
           {/* Models */}
           <Box flexDirection="column" marginBottom={1}>
             <Text bold color="magenta">
-              📊 MODELS
+              📊 SPECIES MOVEPOOL
             </Text>
             {models.slice(0, 6).map((m, i) => {
               const filled = Math.floor(m.percentage / 100 * 10);
@@ -160,13 +160,13 @@ export function Dashboard({ demo }: DashboardProps) {
           {burn && (
             <Box flexDirection="column">
               <Text bold color="red">
-                💳 BURN
+                🔋 PP BURN
               </Text>
-              <Text>  Tokens    {burn.totalTokens >= 1_000_000 ? `${(burn.totalTokens / 1_000_000).toFixed(1)}M` : `${(burn.totalTokens / 1_000).toFixed(1)}K`}</Text>
-              <Text>  Cost      ${burn.estimatedCostUsd.toFixed(2)}/mo</Text>
-              <Text>  Velocity  {burn.tokenVelocity >= 1_000 ? `${(burn.tokenVelocity / 1_000).toFixed(1)}K` : burn.tokenVelocity}/min</Text>
-              <Text>  Sessions  {burn.sessionCount}</Text>
-              <Text>  Integrity {burn.envIntegrity >= 0.8 ? '🟢' : burn.envIntegrity >= 0.5 ? '🟡' : '🔴'} {Math.round(burn.envIntegrity * 100)}%</Text>
+              <Text>  PP (Tokens)   {burn.totalTokens >= 1_000_000 ? `${(burn.totalTokens / 1_000_000).toFixed(1)}M` : `${(burn.totalTokens / 1_000).toFixed(1)}K`}</Text>
+              <Text>  Cost ($)      ${burn.estimatedCostUsd.toFixed(2)}/mo</Text>
+              <Text>  PP Velocity   {burn.tokenVelocity >= 1_000 ? `${(burn.tokenVelocity / 1_000).toFixed(1)}K` : burn.tokenVelocity}/min</Text>
+              <Text>  Battles       {burn.sessionCount}</Text>
+              <Text>  HP Integrity  {burn.envIntegrity >= 0.8 ? '🟢' : burn.envIntegrity >= 0.5 ? '🟡' : '🔴'} {Math.round(burn.envIntegrity * 100)}%</Text>
             </Box>
           )}
         </Box>

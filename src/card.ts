@@ -30,7 +30,7 @@ export function renderTerminal(
   const running = clis.filter(c => c.state === 'RUNNING');
   const idle = clis.filter(c => c.state === 'IDLE' || c.state === 'DETECTED');
 
-  // Agents section
+  // Pokémon section
   const agentLines: string[] = [];
   for (const c of [...running, ...idle].slice(0, 6)) {
     if (c.state === 'RUNNING') {
@@ -42,14 +42,14 @@ export function renderTerminal(
   const remaining = clis.length - agentLines.length;
   if (remaining > 0) agentLines.push(`     … +${remaining} more`);
 
-  // Models section
+  // Species movepool section
   const modelLines: string[] = [];
   for (const m of models.slice(0, 5)) {
     const b = bar(m.percentage, 10);
     modelLines.push(`  ${m.name.padEnd(18)} ${b} ${m.percentage.toFixed(1).padStart(5)}%`);
   }
 
-  // MCP section
+  // TMs & HMs section
   const mcpLines: string[] = [];
   const sortedMcp = [...mcp].sort((a, b) => b.toolCount - a.toolCount);
   for (const t of sortedMcp.slice(0, 5)) {
@@ -59,13 +59,13 @@ export function renderTerminal(
   const mcpRemaining = mcp.length - 5;
   if (mcpRemaining > 0) mcpLines.push(`     … +${mcpRemaining} more`);
 
-  // Burn section
+  // PP Burn section
   const burnLines = [
-    `  Tokens    ${fmtTokens(burn.totalTokens)}`,
-    `  Cost      $${burn.estimatedCostUsd.toFixed(2)}/mo`,
-    `  Velocity  ${fmtTokens(burn.tokenVelocity)}/min`,
-    `  Sessions  ${burn.sessionCount}`,
-    `  Integrity ${bar(burn.envIntegrity * 100, 10)} ${Math.round(burn.envIntegrity * 100)}%`,
+    `  PP Tokens ${fmtTokens(burn.totalTokens)}`,
+    `  Cost ($)  $${burn.estimatedCostUsd.toFixed(2)}/mo`,
+    `  PP/min    ${fmtTokens(burn.tokenVelocity)}/min`,
+    `  Battles   ${burn.sessionCount}`,
+    `  HP (Intg) ${bar(burn.envIntegrity * 100, 10)} ${Math.round(burn.envIntegrity * 100)}%`,
   ];
 
   // Badges
@@ -78,11 +78,14 @@ export function renderTerminal(
 
   const lines: string[] = [
     `┌${'─'.repeat(w)}┐`,
-    `│  ⬡ AgentCard${' '.repeat(w - 18)}${String(scoreResult.total).padStart(4)} pts │`,
+    `│  ◓ Pokégent${' '.repeat(w - 20)}${String(scoreResult.total).padStart(4)} pts │`,
     `│${'━'.repeat(w)}│`,
     `│${' '.repeat(w)}│`,
-    `│  🤖 AGENTS (${running.length} running)${' '.repeat(24)}📊 MODELS${' '.repeat(13)}│`,
   ];
+
+  const leftHeader = `🎒 POKÉMON TEAM (${running.length} run)`.padEnd(28);
+  const rightHeader = `📊 SPECIES MOVEPOOL`.padEnd(24);
+  lines.push(`│  ${leftHeader}  ${rightHeader}│`);
 
   // Two-column: agents + models
   const maxRows = Math.max(agentLines.length, modelLines.length, 1);
@@ -93,8 +96,11 @@ export function renderTerminal(
   }
 
   lines.push(`│${' '.repeat(w)}│`);
+  
   const totalTools = mcp.reduce((sum, t) => sum + t.toolCount, 0);
-  lines.push(`│  🛠️ MCP (${mcp.length} servers, ${totalTools} tools)${' '.repeat(13)}💳 BURN${' '.repeat(15)}│`);
+  const leftHeader2 = `🎒 TMs & HMs (${mcp.length})`.padEnd(26);
+  const rightHeader2 = `🔋 PP BURN (${totalTools} moves)`.padEnd(24);
+  lines.push(`│  ${leftHeader2}  ${rightHeader2}│`);
 
   // Two-column: MCP + Burn
   const maxRows2 = Math.max(mcpLines.length, burnLines.length, 1);
@@ -105,7 +111,10 @@ export function renderTerminal(
   }
 
   lines.push(`│${' '.repeat(w)}│`);
-  lines.push(`│  🏆 RARITY${' '.repeat(18)}🏅 BADGES${' '.repeat(17)}│`);
+  
+  const leftHeader3 = `🏆 RARITY`.padEnd(26);
+  const rightHeader3 = `🏅 BADGES`.padEnd(24);
+  lines.push(`│  ${leftHeader3}  ${rightHeader3}│`);
   lines.push(`│  ${rarity.padEnd(26)}  ${badgeLines[0].padEnd(24)}│`);
   for (const bl of badgeLines.slice(1)) {
     lines.push(`│  ${' '.repeat(26)}  ${bl.padEnd(24)}│`);
@@ -113,7 +122,7 @@ export function renderTerminal(
 
   lines.push(`│${' '.repeat(w)}│`);
   lines.push(`│${'━'.repeat(w)}│`);
-  lines.push(`│  agent-card · npx · privacy-first (zero network)${' '.repeat(7)}│`);
+  lines.push(`│  pokegent · npx · privacy-first (zero network)${' '.repeat(10)}│`);
   lines.push(`└${'─'.repeat(w)}┘`);
 
   return lines.join('\n');

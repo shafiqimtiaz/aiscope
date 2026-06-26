@@ -23,8 +23,8 @@ interface Opts {
 const program = new Command();
 
 program
-  .name('agent-card')
-  .description('Terminal dashboard that shows your agentic AI coding ecosystem')
+  .name('pokegent')
+  .description('Terminal dashboard that shows your Pokémon AI coding ecosystem')
   .version(VERSION);
 
 program
@@ -67,7 +67,7 @@ async function runOneShot(opts: Opts) {
 
   if (opts.html) {
     const html = renderHtml(clis, mcp, models, burn, scoreResult);
-    const outPath = 'agent-card.html';
+    const outPath = 'pokegent.html';
     await fs.writeFile(outPath, html);
     console.log(`✓ HTML card written to ${outPath}`);
     return;

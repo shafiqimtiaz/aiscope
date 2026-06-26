@@ -3,7 +3,7 @@ import os from 'os';
 
 const home = os.homedir();
 
-export const APP_TITLE = '⬡ AgentCard';
+export const APP_TITLE = '◓ Pokégent';
 export const VERSION = '2.0.0';
 export const REFRESH_INTERVAL = 2000;
 
@@ -11,25 +11,26 @@ export interface CliSignature {
   process: string[];
   config: string[];
   icon: string;
+  pokemonId: number;
 }
 
 export const CLI_SIGNATURES: Record<string, CliSignature> = {
-  'Claude Code':        { process: ['claude', 'claude-code'],            config: ['~/.claude', '~/.claude.json', '~/.config/claude'],             icon: '🟣' },
-  'Codex':              { process: ['codex', 'openai-codex'],            config: ['~/.codex', '~/.config/codex'],                                icon: '🟢' },
-  'GitHub Copilot CLI': { process: ['copilot', 'github-copilot'],        config: ['~/.copilot', '~/.config/github-copilot'],                     icon: '⚪' },
-  'Gemini CLI':         { process: ['gemini', 'gemini-cli'],             config: ['~/.gemini', '~/.config/gemini'],                              icon: '🔵' },
-  'Cursor':             { process: ['cursor'],                           config: ['~/.cursor', '~/.cursor-server'],                              icon: '🟡' },
-  'Amp':                { process: ['amp', 'amp-cli'],                   config: ['~/.amp', '~/.config/amp'],                                    icon: '🔶' },
-  'Cline':              { process: ['cline'],                            config: ['~/.cline', '~/.vscode/extensions/saoudrizwan.claude-dev-*'],  icon: '🟠' },
-  'Roo Code':           { process: ['roo', 'roo-code'],                  config: ['~/.roo', '~/.roo-code'],                                      icon: '🔴' },
-  'Kilo Code':          { process: ['kilo', 'kilo-code'],                config: ['~/.kilo', '~/.kilo-code'],                                    icon: '🟤' },
-  'Kiro':               { process: ['kiro'],                             config: ['~/.kiro', '~/.config/kiro'],                                  icon: '⚫' },
-  'Crush':              { process: ['crush'],                            config: ['~/.crush'],                                                   icon: '🩷' },
-  'OpenCode':           { process: ['opencode'],                         config: ['~/.opencode', '~/.config/opencode'],                          icon: '⬜' },
-  'Factory Droid':      { process: ['factory', 'factory-droid'],         config: ['~/.factory-droid'],                                           icon: '🏭' },
-  'Antigravity':        { process: ['antigravity', 'ag-cli'],            config: ['~/.antigravity'],                                             icon: '🚀' },
-  'Kimi CLI':           { process: ['kimi', 'kimi-cli'],                 config: ['~/.kimi', '~/.config/kimi'],                                  icon: '🌙' },
-  'Qwen Code':          { process: ['qwen', 'qwen-code'],               config: ['~/.qwen', '~/.config/qwen'],                                  icon: '✨' },
+  'Mewtwo':        { process: ['claude', 'claude-code'],            config: ['~/.claude', '~/.claude.json', '~/.config/claude'],             icon: '🔮', pokemonId: 150 },
+  'Venusaur':      { process: ['codex', 'openai-codex'],            config: ['~/.codex', '~/.config/codex'],                                icon: '🍃', pokemonId: 3 },
+  'Blastoise':     { process: ['copilot', 'github-copilot'],        config: ['~/.copilot', '~/.config/github-copilot'],                     icon: '🐢', pokemonId: 9 },
+  'Pikachu':       { process: ['gemini', 'gemini-cli'],             config: ['~/.gemini', '~/.config/gemini'],                              icon: '⚡', pokemonId: 25 },
+  'Eevee':         { process: ['cursor'],                           config: ['~/.cursor', '~/.cursor-server'],                              icon: '🦊', pokemonId: 133 },
+  'Charizard':     { process: ['amp', 'amp-cli'],                   config: ['~/.amp', '~/.config/amp'],                                    icon: '🔥', pokemonId: 6 },
+  'Charmander':    { process: ['cline'],                            config: ['~/.cline', '~/.vscode/extensions/saoudrizwan.claude-dev-*'],  icon: '🦎', pokemonId: 4 },
+  'Gengar':        { process: ['roo', 'roo-code'],                  config: ['~/.roo', '~/.roo-code'],                                      icon: '👻', pokemonId: 94 },
+  'Snorlax':       { process: ['kilo', 'kilo-code'],                config: ['~/.kilo', '~/.kilo-code'],                                    icon: '🐻', pokemonId: 143 },
+  'Zubat':         { process: ['kiro'],                             config: ['~/.kiro', '~/.config/kiro'],                                  icon: '🦇', pokemonId: 41 },
+  'Jigglypuff':    { process: ['crush'],                            config: ['~/.crush'],                                                   icon: '🎈', pokemonId: 39 },
+  'Ditto':         { process: ['opencode'],                         config: ['~/.opencode', '~/.config/opencode'],                          icon: '🍮', pokemonId: 132 },
+  'Machamp':       { process: ['factory', 'factory-droid'],         config: ['~/.factory-droid'],                                           icon: '💪', pokemonId: 68 },
+  'Rayquaza':      { process: ['antigravity', 'ag-cli'],            config: ['~/.antigravity'],                                             icon: '🐉', pokemonId: 384 },
+  'Lapras':        { process: ['kimi', 'kimi-cli'],                 config: ['~/.kimi', '~/.config/kimi'],                                  icon: '⛵', pokemonId: 131 },
+  'Dragonite':     { process: ['qwen', 'qwen-code'],               config: ['~/.qwen', '~/.config/qwen'],                                  icon: '🐉', pokemonId: 149 },
 };
 
 export interface McpScanPath {

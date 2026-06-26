@@ -37,7 +37,7 @@ export async function scanClis(): Promise<CliStatus[]> {
       }
     }
 
-    results.push({ name, icon: sig.icon, state, pid, cpuPct, memMb, uptimeS });
+    results.push({ name, icon: sig.icon, state, pid, cpuPct, memMb, uptimeS, pokemonId: sig.pokemonId });
   }
 
   return results;

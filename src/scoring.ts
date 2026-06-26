@@ -62,15 +62,15 @@ function getBadges(
   const running = clis.filter(c => c.state === 'RUNNING').length;
   const providerCount = getProviderCount(models);
 
-  if (mcp.length >= 10) badges.push('🏆 MCP Collector');
-  if (running >= 3) badges.push('🦄 Multi-Agent');
-  if (providerCount >= 3) badges.push('🧬 Provider Hybrid');
-  if (burn.tokenVelocity >= 10_000) badges.push('🔥 Token Blazing');
-  if (burn.sessionCount >= 100) badges.push('💎 Century Club');
+  if (mcp.length >= 10) badges.push('🏆 Pokédex Master');
+  if (running >= 3) badges.push('🦄 Legendary Trainer');
+  if (providerCount >= 3) badges.push('🧬 Hybrid Evolution');
+  if (burn.tokenVelocity >= 10_000) badges.push('🔥 Blast Burn');
+  if (burn.sessionCount >= 100) badges.push('💎 Elite Four');
   if (agentsPct(clis) > 50 && mcpPct(mcp) > 50 && modelsPct(models) > 50 && burnPct(burn) > 50) {
-    badges.push('⚡ Full Stack');
+    badges.push('⚡ Thunder Shock');
   }
-  if (models.length >= 5) badges.push('🌐 Polyglot Coder');
+  if (models.length >= 5) badges.push('🌐 Safari Zone Master');
 
   return badges;
 }
@@ -95,10 +95,10 @@ export function burnPct(burn: BurnMetrics): number {
 }
 
 export function rarityLabel(score: number): string {
-  if (score >= 900) return '🌟 LEGENDARY — Top 1%';
-  if (score >= 750) return '💎 EPIC — Top 5%';
-  if (score >= 600) return '🥇 RARE — Top 15%';
-  if (score >= 400) return '🥈 UNCOMMON — Top 35%';
-  if (score >= 200) return '🥉 COMMON — Top 60%';
-  return '🌱 STARTER — everyone starts here';
+  if (score >= 900) return '🌟 MYTHICAL CHAMPION — Top 1%';
+  if (score >= 750) return '💎 SHINY LEGENDARY — Top 5%';
+  if (score >= 600) return '🥇 POKÉMON MASTER — Top 15%';
+  if (score >= 400) return '🥈 GYM LEADER — Top 35%';
+  if (score >= 200) return '🥉 ELITE TRAINER — Top 60%';
+  return '🌱 BEGINNER TRAINER — everyone starts here';
 }

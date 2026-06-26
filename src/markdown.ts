@@ -15,76 +15,84 @@ export function renderMarkdown(
   const lines: string[] = [
     '```',
     '┌──────────────────────────────────────────────────────────┐',
-    `│  ⬡ AgentCard                                    ${String(scoreResult.total).padStart(4)} pts │`,
-    '│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│',
+    `│  ◓ Pokégent                                     ${String(scoreResult.total).padStart(4)} pts │`,
+    '│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│',
     '│                                                          │',
-    `│  🤖 AGENTS (${running.length} running)           📊 MODELS              │`,
   ];
 
-  // Agents + Models
+  const leftHeader = `🎒 POKÉMON TEAM (${running.length} run)`.padEnd(26);
+  const rightHeader = `📊 SPECIES MOVEPOOL`.padEnd(23);
+  lines.push(`│  ${leftHeader}  │  ${rightHeader}  │`);
+
+  // Pokémon + Species Movepool rows
   const agentLines: string[] = [];
   for (const c of clis.slice(0, 6)) {
     if (c.state === 'RUNNING') {
-      agentLines.push(`│  ${c.icon} ${c.name.padEnd(16)}  ● running              │`);
+      agentLines.push(`${c.icon} ${c.name.padEnd(12)} ● run`);
     } else if (c.state === 'IDLE' || c.state === 'DETECTED') {
-      agentLines.push(`│  ${c.icon} ${c.name.padEnd(16)}  ○ ${c.state.toLowerCase().padEnd(20)}│`);
+      agentLines.push(`${c.icon} ${c.name.padEnd(12)} ○ ${c.state.toLowerCase().slice(0, 4)}`);
+    } else {
+      agentLines.push(`${c.icon} ${c.name.padEnd(12)} ○ abs`);
     }
   }
 
   const modelLines: string[] = [];
   for (const m of models.slice(0, 5)) {
-    const b = bar(m.percentage, 8);
-    modelLines.push(`│  ${m.name.padEnd(16)} ${b} ${m.percentage.toFixed(1).padStart(4)}%            │`);
+    const b = bar(m.percentage, 5);
+    modelLines.push(`${m.name.slice(0, 11).padEnd(11)} ${b} ${m.percentage.toFixed(0).padStart(3)}%`);
   }
 
   const maxRows = Math.max(agentLines.length, modelLines.length);
   for (let i = 0; i < maxRows; i++) {
-    const left = agentLines[i] ?? '│' + ' '.repeat(57) + '│';
-    const right = modelLines[i] ?? '';
-    lines.push(`${left.slice(0, 30)}  ${right}`);
+    const leftPart = (agentLines[i] ?? '').padEnd(26);
+    const rightPart = (modelLines[i] ?? '').padEnd(23);
+    lines.push(`│  ${leftPart}  │  ${rightPart}  │`);
   }
 
   lines.push('│                                                          │');
+  
   const totalTools = mcp.reduce((sum, t) => sum + t.toolCount, 0);
-  lines.push(`│  🛠️ MCP (${mcp.length} srv, ${totalTools} tools)       💳 BURN                 │`);
+  const leftHeader2 = `🎒 TMs & HMs (${mcp.length})`.padEnd(26);
+  const rightHeader2 = `🔋 PP BURN (${totalTools} moves)`.padEnd(23);
+  lines.push(`│  ${leftHeader2}  │  ${rightHeader2}  │`);
 
-  // MCP + Burn
+  // TMs/HMs + PP Burn rows
   const mcpLines: string[] = [];
   const sortedMcp = [...mcp].sort((a, b) => b.toolCount - a.toolCount);
   for (const t of sortedMcp.slice(0, 5)) {
     const tc = t.toolCount ? `[${t.toolCount}]` : '';
-    mcpLines.push(`│  ◆ ${t.name.padEnd(14)} ${tc.padEnd(6)}                 │`);
+    mcpLines.push(`◆ ${t.name.slice(0, 15).padEnd(15)} ${tc}`);
   }
 
   const burnLines = [
-    `│  Tokens   ${fmtTokens(burn.totalTokens).padEnd(10)}               │`,
-    `│  Cost     $${burn.estimatedCostUsd.toFixed(2)}/mo              │`,
-    `│  Velocity ${fmtTokens(burn.tokenVelocity)}/min              │`,
-    `│  Sessions ${String(burn.sessionCount).padEnd(10)}               │`,
+    `PP Tokens   ${fmtTokens(burn.totalTokens)}`,
+    `Cost ($)    $${burn.estimatedCostUsd.toFixed(2)}/mo`,
+    `PP/min      ${fmtTokens(burn.tokenVelocity)}/min`,
+    `Battles     ${burn.sessionCount}`,
   ];
 
   const maxRows2 = Math.max(mcpLines.length, burnLines.length);
   for (let i = 0; i < maxRows2; i++) {
-    const left = mcpLines[i] ?? '│' + ' '.repeat(30);
-    const right = burnLines[i] ?? '';
-    lines.push(`${left.slice(0, 30)}  ${right}`);
+    const leftPart = (mcpLines[i] ?? '').padEnd(26);
+    const rightPart = (burnLines[i] ?? '').padEnd(23);
+    lines.push(`│  ${leftPart}  │  ${rightPart}  │`);
   }
 
   lines.push('│                                                          │');
 
   if (scoreResult.badges.length > 0) {
-    lines.push(`│  🏆 ${scoreResult.badges.slice(0, 3).join(', ').padEnd(52)}│`);
+    lines.push(`│  🏆 ${scoreResult.badges.slice(0, 3).join(', ').padEnd(53)} │`);
     if (scoreResult.badges.length > 3) {
-      lines.push(`│     ${scoreResult.badges.slice(3).join(', ').padEnd(52)}│`);
+      lines.push(`│     ${scoreResult.badges.slice(3).join(', ').padEnd(53)} │`);
     }
   } else {
-    lines.push(`│  🏆 (collect badges by running more tools)${' '.repeat(14)}│`);
+    lines.push(`│  🏆 (collect badges by training more Pokémon)${' '.repeat(13)} │`);
   }
 
   lines.push('│                                                          │');
-  lines.push(`│  ${rarity.padEnd(56)}│`);
-  lines.push('│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│');
-  lines.push('│  agent-card · npx agent-card · github.com/shafiqimtiaz  │');
+  lines.push(`│  ${rarity.padEnd(55)} │`);
+  lines.push('│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│');
+  lines.push('│  ' + 'pokegent · npx pokegent · github.com/shafiqimtiaz'.padEnd(55) + ' │');
   lines.push('└──────────────────────────────────────────────────────────┘');
   lines.push('```');
 

@@ -7,4 +7,4 @@ dist/
 build/
 node_modules/
 *.tsbuildinfo
-agent-card.html
+pokegent.html

@@ -1,10 +1,10 @@
 {
-  "name": "agent-card",
+  "name": "pokegent",
   "version": "2.0.0",
-  "description": "Terminal dashboard that shows your agentic AI coding ecosystem. Press 's' to flex.",
+  "description": "Terminal dashboard that shows your Pokémon AI coding ecosystem. Press 's' to flex.",
   "type": "module",
   "bin": {
-    "agent-card": "./dist/index.js"
+    "pokegent": "./dist/index.js"
   },
   "scripts": {
     "dev": "tsx src/index.ts",
