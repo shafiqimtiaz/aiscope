@@ -120,8 +120,8 @@ export function renderHtml(
     }
     .sprite-container {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 56px;
+      height: 56px;
       background: #F8F9FA;
       border: 2px solid #0F1012;
       display: flex;
@@ -133,6 +133,8 @@ export function renderHtml(
       position: absolute;
       z-index: 2;
       image-rendering: pixelated;
+      width: 52px;
+      height: 52px;
     }
     .pokemon-sprite.absent {
       filter: grayscale(1) brightness(0.25) opacity(0.3);
@@ -141,7 +143,7 @@ export function renderHtml(
       filter: grayscale(0.8) brightness(0.5) opacity(0.7);
     }
     .fallback-icon {
-      font-size: 1.2rem;
+      font-size: 1.8rem;
       z-index: 1;
     }
     .item .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -248,7 +250,7 @@ export function renderHtml(
         <h2>🎒 AGENTS · Pokémon Team (${running.length} running)</h2>
         ${[...running, ...idle].slice(0, 6).map(c => {
           const spriteUrl = c.pokemonSlug ? `https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/${c.pokemonSlug}.png` : '';
-          const imgHtml = spriteUrl ? `<img class="pokemon-sprite ${c.state.toLowerCase()}" src="${spriteUrl}" alt="${c.name}" width="36" height="36" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />` : '';
+          const imgHtml = spriteUrl ? `<img class="pokemon-sprite ${c.state.toLowerCase()}" src="${spriteUrl}" alt="${c.name}" width="52" height="52" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />` : '';
           return `
             <div class="item">
               <div class="sprite-container">
