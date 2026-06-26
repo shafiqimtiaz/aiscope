@@ -16,12 +16,12 @@ export function renderMarkdown(
   const lines: string[] = [
     '```',
     '┌──────────────────────────────────────────────────────────┐',
-    `│  ◓ Pokégent                                     ${String(scoreResult.total).padStart(4)} pts │`,
+    `│  Agentic${' '.repeat(40)}${String(scoreResult.total).padStart(4)} pts │`,
     '│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│',
     '│                                                          │',
   ];
 
-  const leftHeader = `🎒 AGENTS (${running.length} run)`.padEnd(26);
+  const leftHeader = `🎒 AGENTS (${running.length} active)`.padEnd(26);
   const rightHeader = `📊 MODELS`.padEnd(23);
   lines.push(`│  ${leftHeader}  │  ${rightHeader}  │`);
 
@@ -52,7 +52,7 @@ export function renderMarkdown(
   
   const totalTools = mcp.reduce((sum, t) => sum + t.toolCount, 0);
   const leftHeader2 = `🎒 MCP (${mcp.length} servers)`.padEnd(26);
-  const rightHeader2 = `🔋 TOKENS (${totalTools} tools)`.padEnd(23);
+  const rightHeader2 = `🔋 TOKENS (${totalTools} skills)`.padEnd(23);
   lines.push(`│  ${leftHeader2}  │  ${rightHeader2}  │`);
 
   // TMs/HMs + PP Burn rows
@@ -85,13 +85,13 @@ export function renderMarkdown(
       lines.push(`│     ${scoreResult.badges.slice(3).join(', ').padEnd(53)} │`);
     }
   } else {
-    lines.push(`│  🏆 (collect badges by training more Pokémon)${' '.repeat(13)} │`);
+    lines.push(`│  🏆 ${'(collect badges by scanning more systems)'.padEnd(53)} │`);
   }
 
   lines.push('│                                                          │');
   lines.push(`│  ${rarity.padEnd(55)} │`);
   lines.push('│━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━│');
-  lines.push('│  ' + 'pokegent · npx pokegent · github.com/shafiqimtiaz'.padEnd(55) + ' │');
+  lines.push('│  ' + 'agentic · npx pokegent · github.com/shafiqimtiaz'.padEnd(55) + ' │');
   lines.push('└──────────────────────────────────────────────────────────┘');
   lines.push('```');
 

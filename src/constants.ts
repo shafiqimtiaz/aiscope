@@ -3,7 +3,7 @@ import os from 'os';
 
 const home = os.homedir();
 
-export const APP_TITLE = '◓ Pokégent';
+export const APP_TITLE = 'Agentic';
 export const VERSION = '2.0.0';
 export const REFRESH_INTERVAL = 2000;
 

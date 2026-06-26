@@ -20,8 +20,8 @@ export function renderHtml(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pokégent — ${scoreResult.total} PTS</title>
-  <meta property="og:title" content="Pokégent — ${scoreResult.total} PTS">
+  <title>Agentic — ${scoreResult.total} PTS</title>
+  <meta property="og:title" content="Agentic — ${scoreResult.total} PTS">
   <meta property="og:description" content="${running.length} active agents, ${mcp.length} MCP servers loaded. ${rarity}">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -256,10 +256,9 @@ export function renderHtml(
       border-bottom: none;
     }
 
-    .sprite-container {
-      position: relative;
-      width: 48px;
-      height: 48px;
+    .icon-container {
+      width: 44px;
+      height: 44px;
       background: var(--white);
       border: var(--border-width) solid var(--color-border);
       border-radius: var(--radius-xs);
@@ -267,27 +266,7 @@ export function renderHtml(
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-    }
-
-    .pokemon-sprite {
-      position: absolute;
-      z-index: 2;
-      image-rendering: pixelated;
-      width: 44px;
-      height: 44px;
-    }
-
-    .pokemon-sprite.absent {
-      filter: grayscale(1) brightness(0.4) opacity(0.3);
-    }
-
-    .pokemon-sprite.detected, .pokemon-sprite.idle {
-      filter: grayscale(0.8) brightness(0.6) opacity(0.7);
-    }
-
-    .fallback-icon {
-      font-size: 1.5rem;
-      z-index: 1;
+      font-size: 1.4rem;
     }
 
     .item .name {
@@ -440,8 +419,8 @@ export function renderHtml(
   <div class="retro-card">
     <div class="card-header">
       <div class="brand">
-        <span class="logo-glyph">P</span>
-        <span class="logo-word">Pokégent</span>
+        <span class="logo-glyph">A</span>
+        <span class="logo-word">Agentic</span>
       </div>
       <div class="score-badge">
         <span class="score-label">SCORE</span>
@@ -457,16 +436,13 @@ export function renderHtml(
     <div class="grid">
       <!-- Section: Agents -->
       <div class="section">
-        <h2><i data-lucide="terminal"></i> AGENTS · Pokémon Team (${running.length} running)</h2>
+        <h2><i data-lucide="terminal"></i> AGENTS (${running.length} active)</h2>
         ${[...running, ...idle].map((c, idx) => {
-          const spriteUrl = c.pokemonSlug ? `https://raw.githubusercontent.com/msikma/pokesprite/master/pokemon-gen8/regular/${c.pokemonSlug}.png` : '';
-          const imgHtml = spriteUrl ? `<img class="pokemon-sprite ${c.state.toLowerCase()}" src="${spriteUrl}" alt="${c.name}" width="52" height="52" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />` : '';
           const isHidden = idx >= 6;
           return `
             <div class="item ${isHidden ? 'hidden-agent' : ''}" ${isHidden ? 'style="display: none;"' : ''}>
-              <div class="sprite-container">
-                ${imgHtml}
-                <span class="icon fallback-icon">${c.icon}</span>
+              <div class="icon-container">
+                <span class="icon">${c.icon}</span>
               </div>
               <span class="name">${c.name}</span>
               <span class="state ${c.state.toLowerCase()}">${c.state === 'RUNNING' ? `${c.cpuPct.toFixed(1)}% CPU` : c.state.toLowerCase()}</span>
@@ -483,14 +459,14 @@ export function renderHtml(
 
       <!-- Section: Models -->
       <div class="section">
-        <h2><i data-lucide="database"></i> MODELS · Species Movepool</h2>
+        <h2><i data-lucide="database"></i> AI MODELS</h2>
         ${models.slice(0, 5).map(m => {
           const barClass = m.percentage > 50 ? '' : m.percentage > 20 ? 'warning' : 'critical';
           return `
             <div class="item" style="flex-direction:column; align-items:flex-start; gap: var(--space-2);">
               <span class="name" style="font-size: var(--text-caption);">${m.name}</span>
               <div class="hp-container">
-                <span class="hp-label">HP</span>
+                <span class="hp-label" style="background: var(--color-surface-base); color: var(--white); border-color: var(--color-surface-base);">HP</span>
                 <div class="bar-container">
                   <div class="bar-fill ${barClass}" style="width:${m.percentage}%"></div>
                 </div>
@@ -503,13 +479,13 @@ export function renderHtml(
 
       <!-- Section: MCP Servers -->
       <div class="section">
-        <h2><i data-lucide="cpu"></i> MCP SERVERS · TMs & HMs (${mcp.length})</h2>
+        <h2><i data-lucide="cpu"></i> MCP SERVERS · Skills (${mcp.length})</h2>
         ${sortedMcp.map((t, idx) => {
           const isHidden = idx >= 5;
           return `
             <div class="item ${isHidden ? 'hidden-mcp' : ''}" ${isHidden ? 'style="display: none;"' : ''}>
               <span class="name" style="color: var(--color-text-tertiary)">◆ ${t.name}</span>
-              <span class="state" style="border-color: var(--color-border-subtle); color: var(--color-text-primary); font-size: 10px;">[${t.toolCount} TOOLS]</span>
+              <span class="state" style="border-color: var(--color-border-subtle); color: var(--color-text-primary); font-size: 10px;">[${t.toolCount} SKILLS]</span>
             </div>
           `;
         }).join('')}
@@ -523,14 +499,14 @@ export function renderHtml(
 
       <!-- Section: Token Burn -->
       <div class="section">
-        <h2><i data-lucide="zap"></i> TOKEN USAGE · PP Burn</h2>
-        <div class="metric"><span class="label">Tokens (PP)</span><span class="value">${fmtTokens(burn.totalTokens)}</span></div>
+        <h2><i data-lucide="zap"></i> SYSTEM METRICS</h2>
+        <div class="metric"><span class="label">Tokens</span><span class="value">${fmtTokens(burn.totalTokens)}</span></div>
         <div class="metric"><span class="label">Cost ($)</span><span class="value">$${burn.estimatedCostUsd.toFixed(2)}/mo</span></div>
         <div class="metric"><span class="label">Token Rate</span><span class="value">${fmtTokens(burn.tokenVelocity)}/min</span></div>
         <div class="metric"><span class="label">Sessions</span><span class="value">${burn.sessionCount}</span></div>
         
         <div class="item" style="flex-direction:column; align-items:flex-start; gap: var(--space-2); border-bottom: none; padding-bottom: 0;">
-          <span class="label" style="font: var(--weight-bold) 11px/1 var(--font-mono); color: var(--color-text-inverse); text-transform: uppercase;">ENV HEALTH (HP)</span>
+          <span class="label" style="font: var(--weight-bold) 11px/1 var(--font-mono); color: var(--color-text-inverse); text-transform: uppercase;">System Integrity</span>
           <div class="hp-container" style="margin-top: var(--space-1);">
             <span class="hp-label" style="background: var(--color-surface-base); color: var(--white); border-color: var(--color-surface-base);">HP</span>
             <div class="bar-container">
@@ -549,7 +525,7 @@ export function renderHtml(
 
     <!-- Dialogue Box / Footer -->
     <div class="dialogue-box">
-      GENERATED BY <a href="https://github.com/shafiqimtiaz/pokegent" target="_blank" rel="noopener noreferrer">POKÉGENT</a>.<br>
+      GENERATED BY <a href="https://github.com/shafiqimtiaz/pokegent" target="_blank" rel="noopener noreferrer">AGENTIC</a>.<br>
       NPX POKEGENT · PRIVACY-FIRST LOCAL SCAN.
     </div>
   </div>

@@ -79,12 +79,12 @@ export function renderTerminal(
 
   const lines: string[] = [
     `┌${'─'.repeat(w)}┐`,
-    `│  ◓ Pokégent${' '.repeat(w - 20)}${String(scoreResult.total).padStart(4)} pts │`,
+    `│  Agentic${' '.repeat(w - 17)}${String(scoreResult.total).padStart(4)} pts │`,
     `│${'━'.repeat(w)}│`,
     `│${' '.repeat(w)}│`,
   ];
 
-  const leftHeader = `🎒 AGENTS (${running.length} run)`.padEnd(28);
+  const leftHeader = `🎒 AGENTS (${running.length} active)`.padEnd(28);
   const rightHeader = `📊 MODELS`.padEnd(24);
   lines.push(`│  ${leftHeader}  ${rightHeader}│`);
 
@@ -100,7 +100,7 @@ export function renderTerminal(
   
   const totalTools = mcp.reduce((sum, t) => sum + t.toolCount, 0);
   const leftHeader2 = `🎒 MCP (${mcp.length} servers)`.padEnd(26);
-  const rightHeader2 = `🔋 TOKENS (${totalTools} tools)`.padEnd(24);
+  const rightHeader2 = `🔋 TOKENS (${totalTools} skills)`.padEnd(24);
   lines.push(`│  ${leftHeader2}  ${rightHeader2}│`);
 
   // Two-column: MCP + Burn
@@ -123,7 +123,7 @@ export function renderTerminal(
 
   lines.push(`│${' '.repeat(w)}│`);
   lines.push(`│${'━'.repeat(w)}│`);
-  lines.push(`│  pokegent · npx · privacy-first (zero network)${' '.repeat(10)}│`);
+  lines.push(`│  agentic · npx · privacy-first (zero network)${' '.repeat(11)}│`);
   lines.push(`└${'─'.repeat(w)}┘`);
 
   return lines.join('\n');
